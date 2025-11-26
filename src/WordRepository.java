@@ -4,7 +4,7 @@ import java.util.*;
 public class WordRepository {
     private static final String WORDS_FILE_PATH = "resources/words.txt";
 
-    public List<String> loadWordsFromFile() throws FileNotFoundException  {
+    public List<String> loadWordsFromFile() throws FileNotFoundException {
         File file = new File(WORDS_FILE_PATH);
         String absolutePath = file.getAbsolutePath();
 
@@ -28,13 +28,13 @@ public class WordRepository {
                 if (isValidRussianWord(line)) {
                     words.add(line);
                 } else {
-                    System.out.printf("Предупреждение: Строка %d содержит некорректные символы: %s %n", lineNumber, line);
+                    System.out.printf("Предупреждение: Строка %d содержит некорректные символы: %s%n", lineNumber, line);
                 }
             }
             System.out.printf("Загружено %d слов из файла%n", words.size());
 
         } catch (IOException e) {
-            throw new RuntimeException ("Ошибка чтения файла: " + absolutePath + "-" + e.getMessage(),e);
+            throw new RuntimeException("Ошибка чтения файла: " + absolutePath + " - " + e.getMessage(), e);
         }
 
         return words;

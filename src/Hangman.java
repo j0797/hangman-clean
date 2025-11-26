@@ -26,7 +26,8 @@ public class Hangman {
                     System.out.println("До свидания!");
                     return;
                 }
-                default -> System.out.printf("Неверный выбор. Пожалуйста, введите '%c' или '%c'%n", HangmanGraphics.START, HangmanGraphics.QUIT);
+                default ->
+                        System.out.printf("Неверный выбор. Пожалуйста, введите '%c' или '%c'%n", HangmanGraphics.START, HangmanGraphics.QUIT);
 
             }
         }
@@ -41,30 +42,29 @@ public class Hangman {
                     return choice;
                 }
             }
-            System.out.printf("Неверный выбор. Пожалуйста, введите ровно один символ: '%c' или '%c'%n",
-                    HangmanGraphics.START, HangmanGraphics.QUIT);
+            System.out.printf("Неверный выбор. Пожалуйста, введите ровно один символ: '%c' или '%c'%n", HangmanGraphics.START, HangmanGraphics.QUIT);
             System.out.print("Попробуйте снова: ");
         }
     }
 
     private static void startNewGame(Scanner scanner) {
         try {
-        WordRepository wordRepository = new WordRepository();
-        List<String> words = wordRepository.loadWordsFromFile();
+            WordRepository wordRepository = new WordRepository();
+            List<String> words = wordRepository.loadWordsFromFile();
 
-        secretWord = WordRepository.selectRandomWord(words);
-        maskedWord = "_".repeat(secretWord.length());
-        usedLetters = new HashSet<>();
-        wrongAttemptsCount = 0;
+            secretWord = WordRepository.selectRandomWord(words);
+            maskedWord = "_".repeat(secretWord.length());
+            usedLetters = new HashSet<>();
+            wrongAttemptsCount = 0;
 
-        System.out.println("\nИгра началась! У вас " + HangmanGraphics.MAX_ATTEMPTS + " попыток");
+            System.out.println("\nИгра началась! У вас " + HangmanGraphics.MAX_ATTEMPTS + " попыток");
 
-        while (!isGameOver()) {
-            HangmanGraphics.displayGameState(maskedWord, usedLetters, wrongAttemptsCount);
-            char letter = inputRussianLetter(scanner);
+            while (!isGameOver()) {
+                HangmanGraphics.displayGameState(maskedWord, usedLetters, wrongAttemptsCount);
+                char letter = inputRussianLetter(scanner);
 
-            processPlayerGuess(letter);
-        }
+                processPlayerGuess(letter);
+            }
 
             if (isWin()) {
                 HangmanGraphics.displayGameResult(secretWord, wrongAttemptsCount, true);
@@ -99,15 +99,17 @@ public class Hangman {
             wrongAttemptsCount++;
         }
     }
+
     private static boolean isWin() {
         return isWordGuessed();
     }
+
     private static boolean isLose() {
         return wrongAttemptsCount >= HangmanGraphics.MAX_ATTEMPTS;
     }
 
     private static boolean isGameOver() {
-        return  isWin() || isLose();
+        return isWin() || isLose();
     }
 
 
@@ -141,7 +143,7 @@ public class Hangman {
                 newMaskedWord.setCharAt(i, letter);
             }
         }
-        maskedWord=newMaskedWord.toString();
+        maskedWord = newMaskedWord.toString();
     }
 
     private static boolean isWordGuessed() {

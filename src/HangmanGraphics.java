@@ -1,8 +1,9 @@
 import java.util.Set;
+
 public class HangmanGraphics {
     public static final int MAX_ATTEMPTS = 6;
-    public final static char START = '1';
-    public final static char QUIT = '2';
+    public static final char START = '1';
+    public static final char QUIT = '2';
     private static final String[] PICTURES = {
             """
   _______
@@ -97,20 +98,13 @@ __|________
             System.out.println("Поздравляем! Вы отгадали слово: " + secretWord);
         } else {
             System.out.println("Вы проиграли! Загаданное слово: " + secretWord);
-        displayHangman(wrongAttemptsCount);
+            displayHangman(wrongAttemptsCount);
+        }
     }
-}
+
     public static void displayHangman(int numPicture) {
         if (numPicture >= 0 && numPicture < PICTURES.length) {
             System.out.println(PICTURES[numPicture]);
         }
-    }
-
-    public void showMessage(String message) {
-        System.out.println(message);
-    }
-
-    public void showFormattedMessage(String format, Object... args) {
-        System.out.printf(format + "\n", args);
     }
 }
