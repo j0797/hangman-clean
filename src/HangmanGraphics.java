@@ -103,6 +103,7 @@ __|________
             System.out.println(PICTURES[numPicture]);
         }
     }
+
     public void showMessage(String message) {
         System.out.println(message);
     }

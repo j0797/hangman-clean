@@ -6,8 +6,7 @@ public class Hangman {
     private static String maskedWord;
     private static Set<Character> usedLetters;
     private static int wrongAttemptsCount;
-    private static boolean isGameWon;
-    private static boolean isRoundActive;
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -39,7 +38,7 @@ public class Hangman {
     }
 
     private static void startNewGame(Scanner scanner) {
-        try{
+        try {
         WordRepository wordRepository = new WordRepository();
         List<String> words = wordRepository.loadWordsFromFile();
 
@@ -47,24 +46,22 @@ public class Hangman {
         maskedWord = "_".repeat(secretWord.length());
         usedLetters = new HashSet<>();
         wrongAttemptsCount = 0;
-        isRoundActive = true;
-        isGameWon = false;
 
         System.out.println("\nИгра началась! У вас " + HangmanGraphics.MAX_ATTEMPTS + " попыток");
 
-        while (isRoundActive) {
+        while (!isGameOver()) {
             HangmanGraphics.displayGameState(maskedWord, usedLetters, wrongAttemptsCount);
             char letter = inputRussianLetter(scanner);
 
-             processPlayerGuess(letter);
-
-            if (isWordGuessed()) {
-                isRoundActive = false;
-                isGameWon = true;
-            }
+            processPlayerGuess(letter);
         }
 
-        HangmanGraphics.displayGameResult(secretWord, wrongAttemptsCount, isGameWon);
+            if (isWin()) {
+                HangmanGraphics.displayGameResult(secretWord, wrongAttemptsCount, true);
+            } else {
+                HangmanGraphics.displayGameResult(secretWord, wrongAttemptsCount, false);
+            }
+
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
             System.out.println("Работа программы будет завершена.");
@@ -90,12 +87,18 @@ public class Hangman {
         } else {
             System.out.println("Буквы '" + letter + "' нет в этом слове");
             wrongAttemptsCount++;
-            if (wrongAttemptsCount >= HangmanGraphics.MAX_ATTEMPTS) {
-                isRoundActive = false;
-            }
         }
     }
+    private static boolean isWin() {
+        return isWordGuessed();
+    }
+    private static boolean isLose() {
+        return wrongAttemptsCount >= HangmanGraphics.MAX_ATTEMPTS;
+    }
 
+    private static boolean isGameOver() {
+        return  isWin() || isLose();
+    }
 
 
     private static char inputRussianLetter(Scanner scanner) {
