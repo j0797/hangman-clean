@@ -2,6 +2,12 @@ import java.util.*;
 import java.io.FileNotFoundException;
 
 public class Hangman {
+    private static String secretWord;
+    private static String maskedWord;
+    private static Set<Character> usedLetters;
+    private static int wrongAttemptsCount;
+    private static boolean isGameWon;
+    private static boolean isRoundActive;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -37,12 +43,12 @@ public class Hangman {
         WordRepository wordRepository = new WordRepository();
         List<String> words = wordRepository.loadWordsFromFile();
 
-        String secretWord = WordRepository.selectRandomWord(words);
-        String maskedWord = "_".repeat(secretWord.length());
-        Set<Character> usedLetters = new HashSet<>();
-        int wrongAttemptsCount = 0;
-        boolean isRoundActive = true;
-        boolean isGameWon = false;
+        secretWord = WordRepository.selectRandomWord(words);
+        maskedWord = "_".repeat(secretWord.length());
+        usedLetters = new HashSet<>();
+        wrongAttemptsCount = 0;
+        isRoundActive = true;
+        isGameWon = false;
 
         System.out.println("\nИгра началась! У вас " + HangmanGraphics.MAX_ATTEMPTS + " попыток");
 
@@ -50,14 +56,9 @@ public class Hangman {
             HangmanGraphics.displayGameState(maskedWord, usedLetters, wrongAttemptsCount);
             char letter = inputRussianLetter(scanner);
 
-            GameStateUpdateResult result = processPlayerGuess(letter, secretWord, maskedWord, usedLetters, wrongAttemptsCount);
+             processPlayerGuess(letter);
 
-            maskedWord = result.maskedWord;
-            wrongAttemptsCount = result.wrongAttemptsCount;
-            isRoundActive = result.isRoundActive;
-            isGameWon = result.isGameWon;
-
-            if (isWordGuessed(maskedWord)) {
+            if (isWordGuessed()) {
                 isRoundActive = false;
                 isGameWon = true;
             }
@@ -75,32 +76,17 @@ public class Hangman {
 
         }
     }
-    private static class GameStateUpdateResult {
-        String maskedWord;
-        int wrongAttemptsCount;
-        boolean isRoundActive;
-        boolean isGameWon;
 
-        GameStateUpdateResult(String maskedWord, int wrongAttemptsCount, boolean isRoundActive,
-                              boolean isGameWon) {
-            this.maskedWord = maskedWord;
-            this.wrongAttemptsCount = wrongAttemptsCount;
-            this.isRoundActive = isRoundActive;
-            this.isGameWon = isGameWon;
-        }
-    }
-    private static GameStateUpdateResult processPlayerGuess(char letter, String secretWord, String maskedWord, Set<Character> usedLetters, int wrongAttemptsCount) {
-        boolean isRoundActive = true;
-        boolean isGameWon = false;
+    private static void processPlayerGuess(char letter) {
 
         if (usedLetters.contains(letter)) {
             System.out.println("Вы уже вводили эту букву '" + letter + "'");
-            return new GameStateUpdateResult(maskedWord, wrongAttemptsCount, isRoundActive, isGameWon);
+            return;
         }
         usedLetters.add(letter);
         if (secretWord.contains(String.valueOf(letter))) {
             System.out.println("Правильно! Буква '" + letter + "' есть в слове");
-            maskedWord = updateMaskedWord(letter, secretWord, maskedWord);
+            updateMaskedWord(letter);
         } else {
             System.out.println("Буквы '" + letter + "' нет в этом слове");
             wrongAttemptsCount++;
@@ -108,8 +94,6 @@ public class Hangman {
                 isRoundActive = false;
             }
         }
-
-        return new GameStateUpdateResult(maskedWord, wrongAttemptsCount, isRoundActive, isGameWon);
     }
 
 
@@ -132,17 +116,17 @@ public class Hangman {
         return Character.toString(letter).matches("[а-яё]");
     }
 
-    private static String updateMaskedWord(char letter, String secretWord, String maskedWord) {
+    private static void updateMaskedWord(char letter) {
         StringBuilder newMaskedWord = new StringBuilder(maskedWord);
         for (int i = 0; i < secretWord.length(); i++) {
             if (secretWord.charAt(i) == letter) {
                 newMaskedWord.setCharAt(i, letter);
             }
         }
-        return newMaskedWord.toString();
+        maskedWord=newMaskedWord.toString();
     }
 
-    private static boolean isWordGuessed(String maskedWord) {
+    private static boolean isWordGuessed() {
         return !maskedWord.contains("_");
     }
 }
