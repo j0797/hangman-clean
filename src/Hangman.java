@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.FileNotFoundException;
 
 public class Hangman {
 
@@ -32,14 +33,9 @@ public class Hangman {
     }
 
     private static void startNewGame(Scanner scanner) {
+        try{
         WordRepository wordRepository = new WordRepository();
         List<String> words = wordRepository.loadWordsFromFile();
-
-        if (words.isEmpty()) {
-            System.out.println("Не удалось загрузить слова для игры");
-            return;
-        }
-
 
         String secretWord = WordRepository.selectRandomWord(words);
         String maskedWord = "_".repeat(secretWord.length());
@@ -68,8 +64,17 @@ public class Hangman {
         }
 
         HangmanGraphics.displayGameResult(secretWord, wrongAttemptsCount, isGameWon);
-    }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Работа программы будет завершена.");
+            System.exit(1);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Работа программы будет завершена.");
+            System.exit(1);
 
+        }
+    }
     private static class GameStateUpdateResult {
         String maskedWord;
         int wrongAttemptsCount;
@@ -84,7 +89,6 @@ public class Hangman {
             this.isGameWon = isGameWon;
         }
     }
-
     private static GameStateUpdateResult processPlayerGuess(char letter, String secretWord, String maskedWord, Set<Character> usedLetters, int wrongAttemptsCount) {
         boolean isRoundActive = true;
         boolean isGameWon = false;

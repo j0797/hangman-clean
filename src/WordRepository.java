@@ -4,9 +4,16 @@ import java.util.*;
 public class WordRepository {
     private static final String WORDS_FILE_PATH = "resources/words.txt";
 
-    public List<String> loadWordsFromFile() {
+    public List<String> loadWordsFromFile() throws FileNotFoundException  {
+        File file = new File(WORDS_FILE_PATH);
+        String absolutePath = file.getAbsolutePath();
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("Файл со словами не найден: " + absolutePath);
+        }
+
         List<String> words = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(WORDS_FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             int lineNumber = 0;
 
@@ -26,10 +33,8 @@ public class WordRepository {
             }
             System.out.printf("Загружено %d слов из файла%n", words.size());
 
-        } catch (FileNotFoundException e) {
-            System.out.println("Ошибка: Файл со словами не найден: " + WORDS_FILE_PATH);
         } catch (IOException e) {
-            System.out.println("Ошибка чтения файла: " + e.getMessage());
+            throw new RuntimeException ("Ошибка чтения файла: " + absolutePath + "-" + e.getMessage(),e);
         }
 
         return words;
