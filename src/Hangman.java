@@ -17,7 +17,7 @@ public class Hangman {
 
         while (continuePlaying) {
             displayMainMenu();
-            char choice = readMenuChoice(scanner);
+            char choice = inputSymbol(scanner);
 
             switch (choice) {
                 case '1':
@@ -41,7 +41,7 @@ public class Hangman {
         System.out.println("Выберите действие: ");
     }
 
-    private static char readMenuChoice(Scanner scanner) {
+    private static char inputSymbol(Scanner scanner) {
         String input = scanner.next().toLowerCase();
         return input.charAt(0);
     }
@@ -66,7 +66,7 @@ public class Hangman {
 
         while (isRoundActive) {
             displayGameState(maskedWord, usedLetters, wrongAttemptsCount);
-            char letter = readPlayerGuess(scanner);
+            char letter = inputRussianLetter(scanner);
 
             GameStateUpdateResult result = processPlayerGuess(letter, secretWord, maskedWord, usedLetters, wrongAttemptsCount);
 
@@ -123,7 +123,7 @@ public class Hangman {
     }
 
     private static List<String> loadWordsFromFile(String filePath) {
-        List<String> validWords = new ArrayList<>();
+        List<String> words = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             int lineNumber = 0;
@@ -137,12 +137,12 @@ public class Hangman {
                 }
 
                 if (isValidRussianWord(line)) {
-                    validWords.add(line);
+                    words.add(line);
                 } else {
                     System.out.println("Предупреждение: Строка " + lineNumber + " содержит некорректные символы: " + line);
                 }
             }
-            System.out.println("Загружено " + validWords.size() + " слов из файла");
+            System.out.println("Загружено " + words.size() + " слов из файла");
 
         } catch (FileNotFoundException e) {
             System.out.println("Ошибка: Файл со словами не найден: " + filePath);
@@ -150,7 +150,7 @@ public class Hangman {
             System.out.println("Ошибка чтения файла: " + e.getMessage());
         }
 
-        return validWords;
+        return words;
     }
 
     private static boolean isValidRussianWord(String word) {
@@ -164,7 +164,7 @@ public class Hangman {
 
     private static void displayGameState(String maskedWord, Set<Character> usedLetters, int wrongAttemptsCount) {
         System.out.println("\n=== ВИСЕЛИЦА ===");
-        drawHangman(wrongAttemptsCount);
+        displayHangman(wrongAttemptsCount);
         System.out.println("================\n");
         System.out.println("Осталось попыток: " + (MAX_ATTEMPTS - wrongAttemptsCount));
         System.out.println("Слово: " + maskedWord);
@@ -176,7 +176,7 @@ public class Hangman {
         }
     }
 
-    private static char readPlayerGuess(Scanner scanner) {
+    private static char inputRussianLetter(Scanner scanner) {
         char letter;
         do {
             System.out.print("Введите букву русского алфавита: ");
@@ -215,11 +215,11 @@ public class Hangman {
             System.out.println("Вы проиграли! Загаданное слово: " + secretWord);
         }
 
-        drawHangman(wrongAttemptsCount);
+        displayHangman(wrongAttemptsCount);
 
     }
 
-    private static void drawHangman(int wrongAttempts) {
+    private static void displayHangman(int wrongAttempts) {
         switch (wrongAttempts) {
             case 0:
                 System.out.println("  _______");
