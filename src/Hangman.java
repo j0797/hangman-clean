@@ -138,10 +138,10 @@ public class Hangman {
                 if (isValidRussianWord(line)) {
                     words.add(line);
                 } else {
-                    System.out.println("Предупреждение: Строка " + lineNumber + " содержит некорректные символы: " + line);
+                    System.out.printf("Предупреждение: Строка %d содержит некорректные символы: %s %n", lineNumber, line);
                 }
             }
-            System.out.println("Загружено " + words.size() + " слов из файла");
+            System.out.printf("Загружено %d слов из файла%n", words.size());
 
         } catch (FileNotFoundException e) {
             System.out.println("Ошибка: Файл со словами не найден: " + filePath);
@@ -165,7 +165,7 @@ public class Hangman {
         System.out.println("\n=== ВИСЕЛИЦА ===");
         displayHangman(wrongAttemptsCount);
         System.out.println("================\n");
-        System.out.println("Осталось попыток: " + (MAX_ATTEMPTS - wrongAttemptsCount));
+        System.out.printf("Осталось попыток: %d%n", MAX_ATTEMPTS - wrongAttemptsCount);
         System.out.println("Слово: " + maskedWord);
 
         if (!usedLetters.isEmpty()) {
