@@ -26,8 +26,7 @@ public class Hangman {
                     System.out.println("До свидания!");
                     return;
                 }
-                default ->
-                    System.out.printf("Неверный выбор. Пожалуйста, введите '%c' или '%c'  \n", START, QUIT);
+                default -> System.out.printf("Неверный выбор. Пожалуйста, введите '%c' или '%c'  \n", START, QUIT);
 
             }
         }
@@ -213,76 +212,77 @@ public class Hangman {
         } else {
             System.out.println("Вы проиграли! Загаданное слово: " + secretWord);
         }
-
-        displayHangman(wrongAttemptsCount);
-
     }
 
-    private static void displayHangman(int wrongAttempts) {
-        switch (wrongAttempts) {
-            case 0:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 1:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 2:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |     |");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 3:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |    /|");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 4:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |    /|\\");
-                System.out.println("  |");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 5:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |    /|\\");
-                System.out.println("  |    /");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
-            case 6:
-                System.out.println("  _______");
-                System.out.println("  |     |");
-                System.out.println("  |     O");
-                System.out.println("  |    /|\\");
-                System.out.println("  |    / \\");
-                System.out.println("  |");
-                System.out.println("__|________");
-                break;
+    private static final String[] PICTURES = {
+            """
+  _______
+  |     |
+  |
+  |
+  |
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |
+  |
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |     |
+  |
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |    /|
+  |
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |    /|\\
+  |
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |    /|\\
+  |    /
+  |
+__|________
+""",
+            """
+  _______
+  |     |
+  |     O
+  |    /|\\
+  |    / \\
+  |
+__|________
+"""
+    };
+
+    public static void displayHangman(int numPicture) {
+        if (numPicture >= 0 && numPicture < PICTURES.length) {
+            System.out.println(PICTURES[numPicture]);
         }
     }
 }
