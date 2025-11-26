@@ -85,7 +85,9 @@ __|________
 
         if (!usedLetters.isEmpty()) {
             System.out.print("Использованные буквы: ");
-            usedLetters.forEach(letter -> System.out.print(letter + " "));
+            usedLetters.stream()
+                    .sorted()
+                    .forEach(letter -> System.out.print(letter + " "));
             System.out.println();
         }
     }
