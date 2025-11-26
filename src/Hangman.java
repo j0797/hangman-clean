@@ -5,6 +5,8 @@ public class Hangman {
 
     private static final int MAX_ATTEMPTS = 6;
     private static final String WORDS_FILE_PATH = "resources/words.txt";
+    private final static char START = '1';
+    private final static char QUIT = '2';
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -13,22 +15,19 @@ public class Hangman {
     }
 
     private static void startGameLoop(Scanner scanner) {
-        boolean continuePlaying = true;
 
-        while (continuePlaying) {
+        while (true) {
             displayMainMenu();
             char choice = inputSymbol(scanner);
 
             switch (choice) {
-                case '1':
-                    startNewGame(scanner);
-                    break;
-                case '2':
-                    continuePlaying = false;
-                    System.out.println("Всего доброго!");
-                    break;
-                default:
-                    System.out.println("Неверный выбор. Пожалуйста, введите '1' или '2'");
+                case START -> startNewGame(scanner);
+                case QUIT -> {
+                    System.out.println("До свидания!");
+                    return;
+                }
+                default ->
+                    System.out.printf("Неверный выбор. Пожалуйста, введите '%c' или '%c'  \n", START, QUIT);
 
             }
         }
@@ -36,8 +35,8 @@ public class Hangman {
 
     private static void displayMainMenu() {
         System.out.println("\n=== ИГРА ВИСЕЛИЦА ===");
-        System.out.println("1 - начать новую игру");
-        System.out.println("2 - выйти из игры");
+        System.out.println(START + " - начать новую игру");
+        System.out.println(QUIT + " - выйти из игры");
         System.out.println("Выберите действие: ");
     }
 
