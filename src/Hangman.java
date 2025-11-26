@@ -33,8 +33,18 @@ public class Hangman {
     }
 
     private static char inputSymbol(Scanner scanner) {
-        String input = scanner.next().toLowerCase();
-        return input.charAt(0);
+        while (true) {
+            String input = scanner.nextLine().trim();
+            if (input.length() == 1) {
+                char choice = input.charAt(0);
+                if (choice == HangmanGraphics.START || choice == HangmanGraphics.QUIT) {
+                    return choice;
+                }
+            }
+            System.out.printf("Неверный выбор. Пожалуйста, введите ровно один символ: '%c' или '%c'%n",
+                    HangmanGraphics.START, HangmanGraphics.QUIT);
+            System.out.print("Попробуйте снова: ");
+        }
     }
 
     private static void startNewGame(Scanner scanner) {
@@ -102,17 +112,22 @@ public class Hangman {
 
 
     private static char inputRussianLetter(Scanner scanner) {
-        char letter;
-        do {
+        while (true) {
             System.out.print("Введите букву русского алфавита: ");
-            String input = scanner.next().toLowerCase();
-            letter = input.charAt(0);
+            String input = scanner.nextLine().trim();
 
-            if (!isValidRussianLetter(letter)) {
-                System.out.println("Ошибка! Введите букву русского алфавита!");
+            if (input.length() != 1) {
+                System.out.println("Ошибка! Введите ровно одну букву!");
+                continue;
             }
-        } while (!isValidRussianLetter(letter));
-        return letter;
+
+            char letter = input.charAt(0);
+            if (isValidRussianLetter(letter)) {
+                return letter;
+            }
+
+            System.out.println("Ошибка! Введите букву русского алфавита!");
+        }
     }
 
     private static boolean isValidRussianLetter(char letter) {
