@@ -52,6 +52,12 @@ public class Hangman {
             WordRepository wordRepository = new WordRepository();
             List<String> words = wordRepository.loadWordsFromFile();
 
+            if (words.isEmpty()) {
+                System.out.println("Ошибка: не найдено подходящих слов для игры");
+                System.out.println("Возврат в главное меню...");
+                return;
+            }
+
             secretWord = WordRepository.selectRandomWord(words);
             maskedWord = "_".repeat(secretWord.length());
             usedLetters = new HashSet<>();
@@ -73,13 +79,11 @@ public class Hangman {
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Работа программы будет завершена.");
-            System.exit(1);
+            System.out.println("Ошибка: файл со словами не найден - " + e.getMessage());
+            System.out.println("Возврат в главное меню...");
         } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Работа программы будет завершена.");
-            System.exit(1);
+            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Возврат в главное меню...");
 
         }
     }
@@ -124,6 +128,7 @@ public class Hangman {
             }
 
             char letter = input.charAt(0);
+            letter = Character.toLowerCase(letter);
             if (isValidRussianLetter(letter)) {
                 return letter;
             }
